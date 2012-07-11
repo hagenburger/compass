@@ -5,7 +5,12 @@ module Compass
         class Vertical < SpriteLayout
 
           def layout!
-            sort_by_width!
+            sorting = @options.get_var('sorting').value
+            if sorting == 'alphabetical'
+              sort_by_name!
+            else
+              sort_by_width!
+            end
             calculate_width!
             calculate_positions!
             calculate_height!
@@ -14,8 +19,14 @@ module Compass
 
         private # ===========================================================================================>
 
+          def sort_by_name!
+            @images.sort! do |a,b|
+              a.name <=> b.name
+            end #sort!
+          end
+
           def sort_by_width!
-            @images.sort! do |a,b| 
+            @images.sort! do |a,b|
               if (b.size <=> a.size) === 0
                 a.name <=> b.name
               else
@@ -67,7 +78,7 @@ module Compass
                   img.top = image.top
                   img.left = x.to_i
                   @images << img
-                  x += image.width 
+                  x += image.width
                 end #begin
               end #while
             end #map
